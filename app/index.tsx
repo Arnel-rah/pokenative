@@ -1,9 +1,17 @@
-import { Text, View } from "react-native";
+import  ThemedText  from "@/app/components/ThemedText";
+import { StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Index() {
   return (
-    <View style={{backgroundColor: '#a01717ff', padding: 5}}>
-      <Text style={{fontSize: 10}}>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+    <SafeAreaView style= {styles.container}>
+    <ThemedText variant="headline">Pokedex</ThemedText>
+    </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  }
+})
