@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 export default function Index() {
   return (
     <SafeAreaView style= {styles.container}>
-    <ThemedText variant="headline">Pokedex</ThemedText>
+    <ThemedText variant="headline" color="grayWhite">Pokedex</ThemedText>
     </SafeAreaView>
   );
 }

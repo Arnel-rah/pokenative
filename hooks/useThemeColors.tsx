@@ -1,8 +1,11 @@
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "react-native";
 
+type ThemeColorSet = typeof Colors.light;
 
-export const hooksColors = () => {
-    const colors = useColorScheme() ?? 'light';
-    return  Colors[colors];
-}
+const useThemeColors = (): ThemeColorSet => {
+  const theme = useColorScheme() ?? "light";
+  return Colors[theme];
+};
+
+export default useThemeColors;
