@@ -19,9 +19,12 @@ export default function Index() {
         <ThemedText variant="headline" color="grayLight">Pokédex</ThemedText>
       </View>
       <Card style={styles.bodyCard}>
-        <FlatList data={pokemons} renderItem={({item}) => <View>
+        <FlatList data={pokemons} 
+        numColumns={3} 
+        columnWrapperStyle={[styles.gridGap, styles.list]}
+        renderItem={({item}) => <Card style={{flex: 1/3, height: 200}}>
           <Text>{item.name}</Text>
-        </View>} keyExtractor={(item) => item.id.toString()}/>
+        </Card>} keyExtractor={(item) => item.id.toString()}/>
       </Card>
     </SafeAreaView>
   );
@@ -39,6 +42,11 @@ const styles = StyleSheet.create({
   },
   bodyCard: {
     flex: 1,
-
+  },
+  gridGap:{
+    gap: 8
+  },
+  list: {
+    padding: 12
   }
 })
