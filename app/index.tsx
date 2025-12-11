@@ -1,6 +1,4 @@
-import  ThemedText  from "@/app/components/ThemedText";
-import { Colors } from "@/constants/Colors";
-import { StyleSheet, Text, View, Image } from "react-native";
+import  ThemedText  from "@/app/components/ThemedText";import { StyleSheet, Text, View, Image, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Card from "./components/Card";
 import useThemeColors from "@/hooks/useThemeColors";
@@ -21,7 +19,9 @@ export default function Index() {
         <ThemedText variant="headline" color="grayLight">Pokédex</ThemedText>
       </View>
       <Card style={styles.bodyCard}>
-
+        <FlatList data={pokemons} renderItem={({item}) => <View>
+          <Text>{item.name}</Text>
+        </View>} keyExtractor={(item) => item.id.toString()}/>
       </Card>
     </SafeAreaView>
   );
