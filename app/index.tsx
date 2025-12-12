@@ -4,6 +4,7 @@ import Card from "./components/Card";
 import useThemeColors from "@/hooks/useThemeColors";
 import PokemonCard from "./components/pokemon/PokemonCard";
 import useFetchQuery from "@/hooks/useFetchQuerry";
+import getPokemonId from "@/function/pokemon";
 
 
 export default function Index() {
@@ -22,8 +23,8 @@ export default function Index() {
         <FlatList data={pokemons} 
         numColumns={3} 
         columnWrapperStyle={[styles.gridGap, styles.list]}
-        renderItem={({item}) => <PokemonCard id={item.id} name={item.name} style={{flex: 1/3}}/>}
-        keyExtractor={(item) => item.id.toString()}/>
+        renderItem={({item}) => <PokemonCard id={getPokemonId(item.url)} name={item.name} style={{flex: 1/3}}/>}
+        keyExtractor={(item) => item.url}/>
       </Card>
     </SafeAreaView>
   );
