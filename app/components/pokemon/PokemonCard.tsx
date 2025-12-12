@@ -15,6 +15,7 @@ const PokemonCard = ({style, id, name}: Props) => {
         width={72}
         height={72}
         />
+        <ThemedText>{name}</ThemedText>
     </Card>
 
 }
