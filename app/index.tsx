@@ -3,15 +3,14 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import Card from "./components/Card";
 import useThemeColors from "@/hooks/useThemeColors";
 import PokemonCard from "./components/pokemon/PokemonCard";
+import useFetchQuery from "@/hooks/useFetchQuerry";
 
 
 export default function Index() {
   const colors = useThemeColors();
 
-  const pokemons = Array.from({ length: 35 }, (_, k) => ({
-  name: 'pokemon name',
-  id: k + 1
-  }));
+  const {data} = useFetchQuery('/pokemon?limit=21');
+  const pokemons = data?.results ?? []
 
   return (
     <SafeAreaView style= {[styles.container, {backgroundColor: colors.tint} ]}>
