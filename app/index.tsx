@@ -1,4 +1,4 @@
-import  ThemedText  from "@/app/components/ThemedText";import { StyleSheet, Text, View, Image, FlatList } from "react-native";
+import  ThemedText  from "@/app/components/ThemedText";import { StyleSheet, Text, View, Image, FlatList, ActivityIndicator } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Card from "./components/Card";
 import useThemeColors from "@/hooks/useThemeColors";
@@ -10,7 +10,7 @@ import getPokemonId from "@/function/pokemon";
 export default function Index() {
   const colors = useThemeColors();
 
-  const {data} = useFetchQuery('/pokemon?limit=21');
+  const {data, isFetching} = useFetchQuery('/pokemon?limit=21');
   const pokemons = data?.results ?? []
 
   return (
@@ -22,6 +22,9 @@ export default function Index() {
       <Card style={styles.bodyCard}>
         <FlatList data={pokemons} 
         numColumns={3} 
+        ListFooterComponent={
+          isFetching ? <ActivityIndicator color={colors.tint} style={{padding: 4}}/> : null
+        }
         columnWrapperStyle={[styles.gridGap, styles.list]}
         renderItem={({item}) => <PokemonCard id={getPokemonId(item.url)} name={item.name} style={{flex: 1/3}}/>}
         keyExtractor={(item) => item.url}/>
