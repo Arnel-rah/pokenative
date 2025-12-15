@@ -12,6 +12,7 @@ const Card = ({style, ...rest}: Props) => {
 const styles = {
     borderRadius: 8,
     overflow: 'hidden',
+    margin: 4,
     ...Shadow.dp2
 } satisfies ViewStyle
 
