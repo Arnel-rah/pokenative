@@ -1,6 +1,6 @@
-import { Image, StyleSheet, TextInput, Platform } from "react-native";
-import Row from "./Row";
 import useThemeColors from "@/hooks/useThemeColors";
+import { Image, Platform, StyleSheet, TextInput } from "react-native";
+import Row from "./Row";
 
 type Props = {
   value: string;
@@ -8,16 +8,16 @@ type Props = {
 };
 
 const SearchBar = ({ value, onChange }: Props) => {
+  const colors = useThemeColors();
   return (
     <Row
-      style={[styles.wrapper, { backgroundColor: "white" }]}
+      style={[styles.wrapper, { backgroundColor: colors.grayBackground }]}
       gap={12}
     >
       <Image
         source={require("@/assets/images/search.png")}
-        width={20}
-        height={20}
-        style={styles.searchIcon}
+        width={25}
+        height={25}
       />
       <TextInput
         style={styles.input}
@@ -51,9 +51,7 @@ const styles = StyleSheet.create({
       },
     }),
   },
-  searchIcon: {
-    tintColor: "#aaa",
-  },
+
   input: {
     flex: 1,
     fontSize: 16,

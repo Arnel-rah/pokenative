@@ -1,6 +1,6 @@
 import ThemedText from "@/app/components/ThemedText";
 import getPokemonId from "@/function/pokemon";
-import useFetchQuery from "@/hooks/useFetchQuerry";
+import { useInfiniteFetchQuery } from "@/hooks/useFetchQuerry";
 import useThemeColors from "@/hooks/useThemeColors";
 import { useMemo, useState } from "react";
 import {
@@ -21,15 +21,29 @@ import SearchBar from "./components/SearchBar";
 export default function Index() {
   const colors = useThemeColors();
 
-  const { data, isFetching } = useFetchQuery("/pokemon?limit=21");
-  const pokemons = data?.results ?? [];
+  const {
+    data,
+    isFetching,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteFetchQuery("/pokemon?limit=60"); 
+
+  const allPokemons = useMemo(
+    () => data?.pages.flatMap((page) => page.results) ?? [],
+    [data]
+  );
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"number" | "name">("number");
   const [sortOpen, setSortOpen] = useState(false);
 
-  const filteredPokemons = pokemons.filter((pokemon) =>
-    pokemon.name.toLowerCase().includes(search.toLowerCase())
+  const filteredPokemons = useMemo(
+    () =>
+      allPokemons.filter((pokemon) =>
+        pokemon.name.toLowerCase().includes(search.toLowerCase())
+      ),
+    [allPokemons, search]
   );
 
   const displayedPokemons = useMemo(() => {
@@ -119,20 +133,33 @@ export default function Index() {
           contentContainerStyle={
             displayedPokemons.length === 0 ? styles.emptyContainer : undefined
           }
+          onEndReached={() => {
+            if (hasNextPage && !isFetchingNextPage) {
+              fetchNextPage();
+            }
+          }}
+          onEndReachedThreshold={0.5}
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <ActivityIndicator color={colors.tint} style={{ padding: 20 }} />
+            ) : null
+          }
           ListEmptyComponent={
-            isFetching ? (
-              <ActivityIndicator
-                color={colors.tint}
-                size="large"
-                style={{ padding: 40 }}
-              />
-            ) : (
-              <View style={styles.emptyState}>
-                <ThemedText variant="subtitle3" color="grayMeduim">
-                  Aucun Pokémon trouvé
-                </ThemedText>
-              </View>
-            )
+            displayedPokemons.length === 0 ? (
+              isFetching ? (
+                <ActivityIndicator
+                  color={colors.tint}
+                  size="large"
+                  style={{ padding: 40 }}
+                />
+              ) : (
+                <View style={styles.emptyState}>
+                  <ThemedText variant="subtitle2" color="grayWhite">
+                    Aucun Pokémon trouvé
+                  </ThemedText>
+                </View>
+              )
+            ) : null
           }
           renderItem={({ item }) => (
             <PokemonCard
@@ -186,7 +213,6 @@ const styles = StyleSheet.create({
   },
   sortButton: {
     padding: 12,
-    // hitSlop: { top: 10, bottom: 10, left: 10, right: 10 },
   },
   sortIcon: {
     color: "white",
@@ -198,7 +224,6 @@ const styles = StyleSheet.create({
     right: 0,
     width: 180,
     padding: 16,
-    backgroundColor: "transparent",
     borderRadius: 20,
     marginTop: 8,
     zIndex: 10,
@@ -209,8 +234,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 10,
-    backgroundColor: "rgba(8, 8, 8, 0.91)",
-    
   },
   sortTitle: {
     marginBottom: 12,

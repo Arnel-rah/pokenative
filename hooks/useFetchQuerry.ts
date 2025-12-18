@@ -1,27 +1,15 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 
-/* =========================
-   Types API
-========================= */
-type API = {
-  "/pokemon?limit=21": {
-    count: number;
-    next: string | null;
-    results: { name: string; url: string }[];
-  };
+type PokemonListResponse = {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: { name: string; url: string }[];
 };
 
-type PokemonListResponse = API["/pokemon?limit=21"];
-
-/* =========================
-   Constantes
-========================= */
 const endPoint = "https://pokeapi.co/api/v2";
 
-/* =========================
-   Simple query
-========================= */
- const useFetchQuery = <TPath extends keyof API>(path: TPath) => {
+const useFetchQuery = (path: string) => {
   return useQuery<PokemonListResponse>({
     queryKey: [path],
     queryFn: async () => {
@@ -31,36 +19,34 @@ const endPoint = "https://pokeapi.co/api/v2";
           Accept: "application/json",
         },
       });
+      if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     },
   });
 };
 
-export default  useFetchQuery
+export default useFetchQuery;
 
-/* =========================
-   Infinite query
-========================= */
-export const useInfiniteFetchQuery = <TPath extends keyof API>(path: TPath) => {
+export const useInfiniteFetchQuery = (initialPath: string) => {
+  const initialUrl = endPoint + initialPath;
+
   return useInfiniteQuery<PokemonListResponse>({
-    queryKey: [path],
-    initialPageParam: endPoint + path,
-    queryFn: async ({ pageParam }: { pageParam: string }) => {
+    queryKey: [initialPath, "infinite"],
+    initialPageParam: initialUrl,
+    queryFn: async ({ pageParam = initialUrl }) => {
       await wait(1);
-      const res = await fetch(pageParam, {
+      const res = await fetch(pageParam as string, {
         headers: {
           Accept: "application/json",
         },
       });
+      if (!res.ok) throw new Error("Network response was not ok");
       return res.json();
     },
     getNextPageParam: (lastPage) => lastPage.next ?? undefined,
   });
 };
 
-/* =========================
-   Utils
-========================= */
 const wait = (duration: number) => {
   return new Promise<void>((resolve) =>
     setTimeout(resolve, duration * 1000)
