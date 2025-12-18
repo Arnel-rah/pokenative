@@ -5,6 +5,8 @@ import useThemeColors from "@/hooks/useThemeColors";
 import PokemonCard from "./components/pokemon/PokemonCard";
 import useFetchQuery from "@/hooks/useFetchQuerry";
 import getPokemonId from "@/function/pokemon";
+import SearchBar from "./components/SearchBar";
+import { useState } from "react";
 
 
 export default function Index() {
@@ -13,11 +15,15 @@ export default function Index() {
   const {data, isFetching} = useFetchQuery('/pokemon?limit=21');
   // const pokemons = data?.pages.flatMap((page: { results: any; }) => page.results) ?? [];
   const pokemons = data?.results ?? []
+  const [search, setSearch] = useState('');
   return (
     <SafeAreaView style= {[styles.container, {backgroundColor: colors.tint} ]}>
       <View style={styles.header}>
         <Image source={require("@/assets/images/pokeball.png")} width={24} height={24}/>
         <ThemedText variant="headline" color="grayLight">Pokédex</ThemedText>
+      </View>
+      <View>
+        <SearchBar value={search} onChange={setSearch}/>
       </View>
       <Card style={styles.bodyCard}>
         <FlatList data={pokemons} 
