@@ -1,4 +1,4 @@
-import { Image, StyleSheet, TextInput, TouchableOpacity, Platform, Text } from "react-native";
+import { Image, StyleSheet, TextInput, Platform } from "react-native";
 import Row from "./Row";
 import useThemeColors from "@/hooks/useThemeColors";
 
@@ -8,18 +8,6 @@ type Props = {
 };
 
 const SearchBar = ({ value, onChange }: Props) => {
-  const colors = useThemeColors();
-
-  const handleHashPress = () => {
-    if (value.startsWith("#")) {
-      onChange(value.slice(1));
-    } else {
-      onChange("#" + value);
-    }
-  };
-
-  const isNumberMode = value.startsWith("#");
-
   return (
     <Row
       style={[styles.wrapper, { backgroundColor: "white" }]}
@@ -40,12 +28,6 @@ const SearchBar = ({ value, onChange }: Props) => {
         autoCapitalize="none"
         autoCorrect={false}
       />
-      <TouchableOpacity
-        style={[styles.hashButton, isNumberMode && styles.hashButtonActive]}
-        onPress={handleHashPress}
-      >
-        <Text style={styles.hashText}>#</Text>
-      </TouchableOpacity>
     </Row>
   );
 };
@@ -77,22 +59,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#000",
     paddingVertical: 0,
-  },
-  hashButton: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: "#f5f5f5",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  hashButtonActive: {
-    backgroundColor: "#eee",
-  },
-  hashText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#e63946",
   },
 });
 
