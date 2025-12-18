@@ -7,9 +7,9 @@ type Props = ViewProps & {
 const Row = ({style, gap, ...rest}: Props) => {
     return <View style={[rowStyle, style, gap ? {gap: gap} :undefined]} {...rest}></View>
 }
-
+export default Row
 const rowStyle = {
     flex: 0, 
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
 } satisfies ViewStyle;

@@ -7,6 +7,7 @@ import useFetchQuery from "@/hooks/useFetchQuerry";
 import getPokemonId from "@/function/pokemon";
 import SearchBar from "./components/SearchBar";
 import { useState } from "react";
+import Row from "./components/Row";
 
 
 export default function Index() {
@@ -18,13 +19,13 @@ export default function Index() {
   const [search, setSearch] = useState('');
   return (
     <SafeAreaView style= {[styles.container, {backgroundColor: colors.tint} ]}>
-      <View style={styles.header}>
+      <Row style={styles.header} gap={16}>
         <Image source={require("@/assets/images/pokeball.png")} width={24} height={24}/>
         <ThemedText variant="headline" color="grayLight">Pokédex</ThemedText>
-      </View>
-      <View>
+      </Row>
+      <Row>
         <SearchBar value={search} onChange={setSearch}/>
-      </View>
+      </Row>
       <Card style={styles.bodyCard}>
         <FlatList data={pokemons} 
         numColumns={3} 
@@ -44,10 +45,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 16,
-    padding: 12
+    padding: 12,
   },
   bodyCard: {
     flex: 1,
