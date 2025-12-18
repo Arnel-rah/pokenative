@@ -11,8 +11,8 @@ export default function Index() {
   const colors = useThemeColors();
 
   const {data, isFetching} = useFetchQuery('/pokemon?limit=21');
+  // const pokemons = data?.pages.flatMap((page: { results: any; }) => page.results) ?? [];
   const pokemons = data?.results ?? []
-
   return (
     <SafeAreaView style= {[styles.container, {backgroundColor: colors.tint} ]}>
       <View style={styles.header}>
@@ -53,3 +53,7 @@ const styles = StyleSheet.create({
     padding: 12
   }
 })
+
+function useInfiniteFetchQuery(arg0: string): { data: any; isFetching: any; } {
+  throw new Error("Function not implemented.");
+}
