@@ -25,7 +25,7 @@ const PokemonCard = ({ style, id, name }: Props) => {
                 id
               ).padStart(3, "0")}.png`,
             }}
-            style={{ width: 120, height: 120 }}
+            style={{ width: 72, height: 72 }}
           />
 
           <ThemedText>{name}</ThemedText>
