@@ -14,7 +14,7 @@ const SearchBar = ({ value, onChange }: Props) => {
       style={[styles.wrapper, { backgroundColor: colors.grayBackground }]}
       gap={12}
     >
-      <Image
+      <Image style={styles.logo}
         source={require("@/assets/images/search.png")}
         width={25}
         height={25}
@@ -58,6 +58,9 @@ const styles = StyleSheet.create({
     color: "#000",
     paddingVertical: 0,
   },
+  logo: {
+    objectFit: 'cover'
+  }
 });
 
 export default SearchBar;

@@ -21,18 +21,14 @@ import SearchBar from "./components/SearchBar";
 export default function Index() {
   const colors = useThemeColors();
 
-  const {
-    data,
-    isFetching,
-    isFetchingNextPage,
-    fetchNextPage,
-    hasNextPage,
-  } = useInfiniteFetchQuery("/pokemon?limit=60"); 
+  const { data, isFetching, isFetchingNextPage, fetchNextPage, hasNextPage } =
+    useInfiniteFetchQuery("/pokemon?limit=60");
 
-  const allPokemons = useMemo(
-    () => data?.pages.flatMap((page) => page.results) ?? [],
-    [data]
-  );
+  type PokemonListItem = { name: string; url: string };
+
+  const allPokemons = useMemo<PokemonListItem[]>(() => {
+    return data?.pages.flatMap((page: any) => page.results ?? []) ?? [];
+  }, [data]);
 
   const [search, setSearch] = useState("");
   const [sortBy, setSortBy] = useState<"number" | "name">("number");
@@ -62,9 +58,9 @@ export default function Index() {
         <Row style={styles.header}>
           <Row gap={16}>
             <Image
-              source={require("@/assets/images/pokeball.png")}
-              width={32}
-              height={32}
+              source={require("@/assets/images/logo.png")}
+              width={15}
+              height={15}
               style={{ tintColor: "white" }}
             />
             <ThemedText variant="headline" color="grayWhite">
@@ -82,7 +78,11 @@ export default function Index() {
 
             {sortOpen && (
               <View style={[styles.sortMenu, styles.sortMenuShadow]}>
-                <ThemedText variant="subtitle2" color="grayWhite" style={styles.sortTitle}>
+                <ThemedText
+                  variant="subtitle2"
+                  color="grayWhite"
+                  style={styles.sortTitle}
+                >
                   Sort by:
                 </ThemedText>
 
