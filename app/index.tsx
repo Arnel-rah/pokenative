@@ -7,6 +7,7 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
+  Modal,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -59,65 +60,19 @@ export default function Index() {
           <Row gap={16}>
             <Image
               source={require("@/assets/images/logo.png")}
-              width={15}
-              height={15}
-              style={{ tintColor: "white" }}
+              style={{ tintColor: "white", width: 24, height: 24 }}
             />
             <ThemedText variant="headline" color="grayWhite">
               Pokédex
             </ThemedText>
           </Row>
 
-          <View style={styles.sortButtonContainer}>
-            <TouchableOpacity
-              onPress={() => setSortOpen((prev) => !prev)}
-              style={styles.sortButton}
-            >
-              <Text style={styles.sortIcon}>⇅</Text>
-            </TouchableOpacity>
-
-            {sortOpen && (
-              <View style={[styles.sortMenu, styles.sortMenuShadow]}>
-                <ThemedText
-                  variant="subtitle2"
-                  color="grayWhite"
-                  style={styles.sortTitle}
-                >
-                  Sort by:
-                </ThemedText>
-
-                <TouchableOpacity
-                  style={styles.sortOption}
-                  onPress={() => {
-                    setSortBy("number");
-                    setSortOpen(false);
-                  }}
-                >
-                  <View style={styles.radioOuter}>
-                    {sortBy === "number" && <View style={styles.radioInner} />}
-                  </View>
-                  <ThemedText color="grayWhite" style={styles.sortOptionText}>
-                    Number
-                  </ThemedText>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  style={styles.sortOption}
-                  onPress={() => {
-                    setSortBy("name");
-                    setSortOpen(false);
-                  }}
-                >
-                  <View style={styles.radioOuter}>
-                    {sortBy === "name" && <View style={styles.radioInner} />}
-                  </View>
-                  <ThemedText color="grayWhite" style={styles.sortOptionText}>
-                    Name
-                  </ThemedText>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
+          <TouchableOpacity
+            onPress={() => setSortOpen(true)}
+            style={styles.sortButton}
+          >
+            <Text style={styles.sortIcon}>⇅</Text>
+          </TouchableOpacity>
         </Row>
 
         <Row style={styles.search}>
@@ -171,6 +126,52 @@ export default function Index() {
           keyExtractor={(item) => item.url}
         />
       </Card>
+
+      <Modal transparent visible={sortOpen} animationType="fade">
+        <TouchableOpacity
+          style={styles.overlay}
+          activeOpacity={1}
+          onPress={() => setSortOpen(false)}
+        >
+          <View
+            style={[styles.sortMenu, { backgroundColor: colors.tint }]}
+          >
+            <View style={styles.sortCard}>
+              <ThemedText style={styles.sortTitle}>Sort by:</ThemedText>
+
+              <TouchableOpacity
+                style={styles.sortOption}
+                onPress={() => {
+                  setSortBy("number");
+                  setSortOpen(false);
+                }}
+              >
+                <View style={styles.radioOuter}>
+                  {sortBy === "number" && (
+                    <View style={styles.radioInner} />
+                  )}
+                </View>
+                <Text style={styles.sortOptionText}>Number</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                style={styles.sortOption}
+                onPress={() => {
+                  setSortBy("name");
+                  setSortOpen(false);
+                }}
+              >
+                <View style={styles.radioOuter}>
+                  {sortBy === "name" && (
+                    <View style={styles.radioInner} />
+                  )}
+                </View>
+                <Text style={styles.sortOptionText}>Name</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -208,9 +209,6 @@ const styles = StyleSheet.create({
     padding: 40,
     alignItems: "center",
   },
-  sortButtonContainer: {
-    position: "relative",
-  },
   sortButton: {
     padding: 12,
   },
@@ -218,26 +216,29 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 28,
   },
-  sortMenu: {
-  position: "absolute",
-  top: "100%",
-  right: 0,
-  width: 180,
-  padding: 16,
-  borderRadius: 20,
-  marginTop: 8,
-  zIndex: 10,
-
-  backgroundColor: "#2B2B2B",
-},
-  sortMenuShadow: {
-    shadowColor: "#000000ff",
-    shadowOffset: { width: 4, height: 4 },
-    shadowRadius: 8,
-    elevation: 10,
+  overlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.2)",
   },
-
+  sortMenu: {
+    position: "absolute",
+    top: 90,
+    right: 16,
+    padding: 8,
+    borderRadius: 20,
+    elevation: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowRadius: 10,
+  },
+  sortCard: {
+    backgroundColor: "white",
+    borderRadius: 16,
+    padding: 16,
+  },
   sortTitle: {
+    color: "white",
+    fontWeight: "600",
     marginBottom: 12,
   },
   sortOption: {
@@ -248,20 +249,22 @@ const styles = StyleSheet.create({
   sortOptionText: {
     marginLeft: 12,
     fontSize: 16,
+    color: "#333",
+    fontWeight: "500",
   },
   radioOuter: {
-    width: 24,
-    height: 24,
-    borderRadius: 12,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
     borderWidth: 2,
-    borderColor: "white",
+    borderColor: "#DC0A2D",
     justifyContent: "center",
     alignItems: "center",
   },
   radioInner: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    backgroundColor: "white",
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#DC0A2D",
   },
 });
